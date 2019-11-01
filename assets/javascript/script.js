@@ -1,31 +1,31 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $(document).foundation();
     //randomly picking a location
     //let pHLocations = ["Atlanta, GA", "Tampa, Florida", "New York, NY", "Denver, CO"];
     //randomly creating weather condition
     let pHConditions = [{
-            "description": "sun",
-            "conditionIcon": "wi-day-sunny",
-            "background": "sunny"
-        },
+        "description": "sun",
+        "conditionIcon": "wi-day-sunny",
+        "background": "sunny"
+    },
 
-        {
-            "description": "rain",
-            "conditionIcon": "wi-day-thunderstorm",
-            "background": "rainy"
-        },
+    {
+        "description": "rain",
+        "conditionIcon": "wi-day-thunderstorm",
+        "background": "rainy"
+    },
 
-        {
-            "description": "snow",
-            "conditionIcon": "wi-day-snow-wind",
-            "background": "snowy"
-        },
+    {
+        "description": "snow",
+        "conditionIcon": "wi-day-snow-wind",
+        "background": "snowy"
+    },
 
-        {
-            "description": "cloud",
-            "conditionIcon": "wi-day-cloudy",
-            "background": "cloudy"
-        }
+    {
+        "description": "cloud",
+        "conditionIcon": "wi-day-cloudy",
+        "background": "cloudy"
+    }
     ]
 
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
     // var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q="  + "&appid=" + APIKey
 
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             const latitude = position.coords.latitude;
             const longintude = position.coords.longitude;
             var queryURL = "http://api.openweathermap.org/data/2.5/weather?units=imperial&lat=" + latitude + "&lon=" + longintude + "&appid=" + APIKey
@@ -53,25 +53,25 @@ $(document).ready(function() {
                 method: "GET"
             })
 
-            .then(function(response) {
-                console.log(queryURL);
-                console.log(response);
+                .then(function (response) {
+                    console.log(queryURL);
+                    console.log(response);
 
-                //$(".city").append("City:" + response.name);
-                $("#location").text(response.name);
-                $("#cloud").text(response.clouds.all);
-                $("#wind").text(response.wind.speed);
-                $("#humidity").text(response.main.humidity);
-                $("#temperature").text(response.main.temp);
-                //$(".temp").text("Temperature (F)" + response.main.temp);
+                    //$(".city").append("City:" + response.name);
+                    $("#location").text(response.name);
+                    $("#cloud").text(response.clouds.all);
+                    $("#wind").text(response.wind.speed);
+                    $("#humidity").text(response.main.humidity);
+                    $("#temperature").text(response.main.temp);
+                    //$(".temp").text("Temperature (F)" + response.main.temp);
 
-                console.log("Wind:" + response.main.wind);
-                console.log("Humidity:" + response.main.humidity);
-                console.log("Temperature (F):" + response.main.temp);
-                console.log("Cloud:" + response.main.cloud);
-                console.log("City:" + response.main.city);
+                    console.log("Wind:" + response.main.wind);
+                    console.log("Humidity:" + response.main.humidity);
+                    console.log("Temperature (F):" + response.main.temp);
+                    console.log("Cloud:" + response.main.cloud);
+                    console.log("City:" + response.main.city);
 
-            });
+                });
         });
     } else {
         alert("Geolocation is not supported by this browser.");
@@ -120,12 +120,38 @@ $(document).ready(function() {
         const bestIngredient = getIngredient(currWeather);
         console.log(bestIngredient);
 
-       var queryURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + bestIngredient;
+        var queryURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + bestIngredient;
         var Cocktails = []
         $.ajax({
-           url: queryURL,
-           method: "GET"
-       }).then(function (response) {
-       
-    }
-})
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+
+
+            const drink = response.drinks;
+            var n = drink.length;
+            const random = Math.floor(Math.random() * n);
+            specific = drink[random];
+            var specificId = specific.idDrink;
+            console.log(specificId);
+
+            var queryURL2 = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + specificId;
+
+            $.ajax({
+                url: queryURL2,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response)
+                let index = 1;
+                let ingredientArray = [];
+                let drinkagain = response.drinks[0]
+                while (drinkagain['strIngredient' + index]) {
+                    ingredientArray.push({ name: drinkagain['strIngredient' + index], amount: drinkagain['strMeasure' + index] ? drinkagain['strMeasure' + index] : "A dash " });
+                    index++;
+                }
+                console.log('Drink: ', drinkagain.strDrink);
+                console.log('Ingredients: ');
+                console.log(ingredientArray);
+
+            });
+        });
