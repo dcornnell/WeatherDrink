@@ -15,6 +15,8 @@
 
 On visiting our page the user will be given a suggestion for a cocktail and a recipe. This recommendation will be based off the weather of the current users location. Looking at various weather statistics such as temperature, rain, snow or sunshine we will attempt to match a drink with ingredients that reflect those conditions.
 
+![Weather Drink]https://dcornnell.github.io/Portfolio-2019/assets/images//daily_booze.png "Weather Drink")
+
 ## APIs to be used
 
 - [OpenWeatherMap](https://openweathermap.org/)
